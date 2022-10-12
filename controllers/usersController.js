@@ -20,16 +20,20 @@ const postUsers =  asyncHandler(async(req, res) => {
     res.status(200).json(user);
 });
 
-const setUser = asyncHandler(async(req, res) => {
-    if(!req.body.text){
+const updateUser = asyncHandler(async(req, res) => {
+    const user = await User.findById(req.params.id);
+    if(!user){
         res.status(400)
-        throw new Error('text is required');
+        throw new Error('User not found');
     }
-    res.status(200).json({ message:'set user'});
+    const updateUser = await User.findByIdAndUpdate(req.params.id, req.body, {
+        new: true, 
+    })
+    res.status(200).json(updateUser);
 });
 
 module.exports = {
     getUsers,
     postUsers,
-    setUser,
+    updateUser,
 };
