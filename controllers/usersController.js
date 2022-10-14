@@ -1,4 +1,5 @@
 const asyncHandler = require('express-async-handler')
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/usersModel')
 
@@ -22,7 +23,7 @@ const postUsers =  asyncHandler(async(req, res) => {
     user.password = await bcrypt.hash(user.password, salt);
     await user.save();
 
-    res.status(200).json(user);
+    res.status(200).json({user, token: generateToken(user._id)});
 });
 
 const updateUser = asyncHandler(async(req, res) => {
@@ -57,17 +58,38 @@ const login = asyncHandler(async(req, res) => {
         throw new Error('User not found');
     };
     if(user && (await bcrypt.compare(password, user.password))) {
-        res.json(user)
+        res.json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            token: generateToken(user._id)});
     } else {
         res.status(401)
         throw new Error('Invalid email or password')
     }
-})
+});
 
+//Get user data private 
+const getme = asyncHandler(async(req, res) => {
+
+    const {_id, name, email} = await User.findById(req.user._id);
+
+    res.status(200).json({_id, name, email});
+
+});
+
+//generate JWT token
+const generateToken = (id) => {
+
+    return jwt.sign({id}, process.env.JWT_SECRET, {
+        expiresIn: '30d',
+    })
+}
 module.exports = {
     getUsers,
     postUsers,
     updateUser,
     deleteUser,
     login,
+    getme,
 };
