@@ -9,6 +9,7 @@ const getUsers =  asyncHandler(async(req, res) => {
     res.status(200).json(users);
 }); 
 
+// register user
 const postUsers =  asyncHandler(async(req, res) => {
     if(!req.body.name || !req.body.email || !req.body.password) {
         res.status(400).json({ message:'text is required'});
@@ -26,6 +27,7 @@ const postUsers =  asyncHandler(async(req, res) => {
     res.status(200).json({user, token: generateToken(user._id)});
 });
 
+//update user 
 const updateUser = asyncHandler(async(req, res) => {
     const user = await User.findById(req.params.id);
     if(!user){
@@ -38,6 +40,7 @@ const updateUser = asyncHandler(async(req, res) => {
     res.status(200).json(updateUser);
 });
 
+//delet user
 const deleteUser = asyncHandler(async(req, res) => {
     const user = await User.findById(req.params.id);
     if(!user){
