@@ -5,8 +5,8 @@ const Bus = require('../models/busModel');
 // @route   GET /api/buses
 // @access  Public
 const getBuses = asyncHandler(async (req, res) => {
-    const buses = await Bus.find({});
-    res.json(buses);
+        const buses = await Bus.find({});
+        res.json(buses);
     });
 // @desc Create a bus
 // @route POST /api/buses
