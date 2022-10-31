@@ -77,5 +77,13 @@ const getTripsWithBus = asyncHandler(async (req, res) => {
     res.json(trips);
 });
 
+//recherche par ville de depart et d'arriver
+// @desc    Get all trips with bus information
+// @route   GET /api/trips/bus
+// @access  Public
+const bookingTrip = asyncHandler(async (req, res) => {
+    const trips = await Trip.find({depart: req.params.depart, arrive: req.params.arrive}).populate('busNumber');
+    res.json(trips);
+});
 
-module.exports = { getTrips, createTrip, updateTrip, deleteTrip, getTripsWithBus };
+module.exports = { getTrips, createTrip, updateTrip, deleteTrip, getTripsWithBus, bookingTrip };

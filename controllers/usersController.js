@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/usersModel')
 
+
 const getUsers =  asyncHandler(async(req, res) => {
     const users = await User.find()
 
