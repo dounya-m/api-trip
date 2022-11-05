@@ -17,16 +17,24 @@ const tripSchema = new mongoose.Schema({
         required: [true, 'Please enter the arrival place'],
     },
     dateDep: {
-        type: Date,
+        type: String,
         required: [true, 'Please enter the date'],
     },
     dateArr: {
-        type: Date,
+        type: String,
         required: [true, 'Please enter the date'],
     },
-    time: {
+    timeDep: {
         type: String,
         required: [true, 'Please enter the time'],
+    },
+    timeArr: {
+        type: String,
+        required: [true, 'Please enter the time'],
+    },
+    duree:{
+        type: String,
+        required: [true, 'Please enter the duration'],
     },
     price: {
         type: Number,

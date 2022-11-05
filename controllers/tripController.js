@@ -15,15 +15,16 @@ const getTrips = asyncHandler(async (req, res) => {
         res.json(trips);
     });
 
+
 // @desc Create a trip
 // @route POST /api/trips
 // @access Public
 const createTrip = asyncHandler(async (req, res) => {
-    const {busNumber, depart, arrive, dateDep, dateArr, time, price, break1, break2, break3, break4} = req.body;
+    const {busNumber, depart, arrive, dateDep, dateArr, timeDep, timeArr, duree, price, break1, break2, break3, break4} = req.body;
 
-    if(!busNumber || !depart || !arrive || !dateDep || !dateArr || !time || !price || dateDep > dateArr ) {
-        res.status(400).json({ message:'text is required or place is not valid or date is not valid'});
-    };
+        // if(!busNumber || !depart || !arrive || !dateDep || !dateArr || !time || !price || dateDep > dateArr ) {
+        //     res.status(400).json({ message:'text is required or place is not valid or date is not valid'});
+        // };
 
     const trip = await Trip.create({
         busNumber,
@@ -31,7 +32,9 @@ const createTrip = asyncHandler(async (req, res) => {
         arrive,
         dateDep,
         dateArr,
-        time,
+        timeDep,
+        timeArr,
+        duree,
         price,
         break1, 
         break2,
@@ -82,8 +85,26 @@ const getTripsWithBus = asyncHandler(async (req, res) => {
 // @route   GET /api/trips/bus
 // @access  Public
 const bookingTrip = asyncHandler(async (req, res) => {
-    const trips = await Trip.find({depart: req.params.depart, arrive: req.params.arrive}).populate('busNumber');
-    res.json(trips);
+    const {...others} = req.headers;
+    const searchTrip =  [];
+    const time_now = new Date().toLocaleTimeString();
+    const date_now = new Date().toLocaleDateString();
+    const trips = await Trip.find({...others}).populate('busNumber');
+    // if(trips.length){
+        for(let i=0; i<trips.length; i++){
+            if(trips.dateDep >= date_now ){
+                searchTrip.push(trips[i]);
+            }
+        }
+        // searchTrip ? res.status(200).json(searchTrip) : res.status(400).json({message: 'No trip found'});
+    // }    
+    res.json(searchTrip);
 });
+// const bookingTrip = asyncHandler(async (req, res) => {
+//     const {...others} = req.headers;
+//     const trips = await Trip.find({...others}).populate('busNumber');
+//     res.status(200).json(trips);
+// });
+
 
 module.exports = { getTrips, createTrip, updateTrip, deleteTrip, getTripsWithBus, bookingTrip };
