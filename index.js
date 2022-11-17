@@ -18,6 +18,7 @@ app.use('/api/users', require('./routes/usersRoutes'));
 app.use('/api/admin', require('./routes/adminRoutes'));
 app.use('/api/bus', require('./routes/busRoutes'));
 app.use('/api/trip', require('./routes/tripRoutes'));
+app.use('/api/book', require('./routes/bookingRoutes'))
 
 app.use(errorHandler)
     

@@ -12,7 +12,7 @@ const getBookings = asyncHandler(async (req, res) => {
 // @route POST /api/bookings
 // @access Public
 const createBooking = asyncHandler(async (req, res) => {
-    const {user, trip, state} = req.body;
+    const {user, trip, state} = req.params;
     if(!user || !trip) {
         res.status(400).json({ message:'user and trip is required'});
     };
@@ -39,5 +39,19 @@ const updateBooking = asyncHandler(async (req, res) => {
     })
     res.status(200).json(updating);
 });
+const getBookinguser = asyncHandler(async (req, res) => {
+    const {state} = req.params;
+    const booking = await Booking.findOne({user:req.params.idUser}).sort({createdAt: -1}).populate(['user', 'trip']);
+    if(!booking){
+        res.status(400)
+        throw new Error('Booking not found');
+    }
 
-module.exports = { getBookings, createBooking, updateBooking };
+    res.status(200).json(booking);
+});
+
+//@desc get trips and user and trips
+//@route GET /api/bookings
+//@acces Public
+
+module.exports = { getBookings, createBooking, updateBooking, getBookinguser };
